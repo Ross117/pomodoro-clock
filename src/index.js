@@ -2,6 +2,8 @@
 
 // use fade in/out and/or animation effects?
 
+// does user need the option to set periods of longer than an hour?or just use mm:ss?
+
 const pomodoroClock = (function () {
   "use strict";
 
@@ -44,13 +46,13 @@ const pomodoroClock = (function () {
     intervalID = setInterval(countdown, 1000);
   }
 
-  const stopClock = () => {
+  const pauseClock = () => {
     clearInterval(intervalID);
   };
 
   return {
     startClock: startClock,
-    stopClock: stopClock
+    pauseClock: pauseClock
   }
 
 })();
@@ -58,5 +60,5 @@ const pomodoroClock = (function () {
 document.querySelector(".startClock")
   .addEventListener("click", pomodoroClock.startClock);
 
-document.querySelector(".stopClock")
-  .addEventListener("click", pomodoroClock.stopClock);
+document.querySelector(".pauseClock")
+  .addEventListener("click", pomodoroClock.pauseClock);

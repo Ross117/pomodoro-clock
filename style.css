@@ -1,0 +1,20 @@
+input {
+  margin: 10px;
+}
+
+button {
+  margin: 10px;
+}
+
+.heading {
+  margin-bottom: 20px;
+}
+
+.userPrompts {
+  margin-bottom: 20px;
+}
+
+.clockContainer {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}

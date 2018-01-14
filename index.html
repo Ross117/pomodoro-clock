@@ -13,11 +13,34 @@
 <body>
 
   <div class="container-fluid">
-    <input type="text" class="clock" value="00:00:00" />
-    <button type="button" class="startClock">Start Clock</button>
-    <button type="button" class="stopClock">Stop Clock</button>
-    <input type="text" class="workTime" value="00:01:00" />
-    <input type="text" class="breakTime" value="00:00:30" />
+    <div class="row">
+      <div class="mx-auto heading">
+        <h1>Pomodoro Clock</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mx-auto userPrompts">
+        <form>
+          <!--need validation - use 'pattern' attribute with a regexp?-->
+          <!--use 'select' input type? -->
+          <label for="prompt">Select:</label>
+          <input type="text" class="prompt workTime" value="00:01:00" />
+          <input type="text" class="prompt breakTime" value="00:00:30" />
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mx-auto clockContainer">
+        <input type="text" class="clock" value="00:00:00" readonly />
+      </div>
+    </div>
+    <div class="row">
+      <div class="mx-auto userButtons">
+        <button type="button" class="btn btn-info startClock">Start Clock</button>
+        <button type="button" class="btn btn-info pauseClock">Pause Clock</button>
+        <button type="button" class="btn btn-info clearClock">Clear Clock</button>
+      </div>
+    </div>
   </div>
 
   <script src="src/index.js"></script>
