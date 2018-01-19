@@ -13,34 +13,38 @@
 <body>
 
   <div class="container-fluid">
+
     <div class="row">
       <div class="mx-auto heading">
         <h1>Pomodoro Clock</h1>
       </div>
     </div>
+
     <div class="row">
       <div class="mx-auto userPrompts">
         <form>
-          <!--need validation - use 'pattern' attribute with a regexp?-->
-          <!--use 'select' input type? -->
-          <label for="prompt">Select:</label>
-          <input type="text" class="prompt workTime" value="00:01:00" />
-          <input type="text" class="prompt breakTime" value="00:00:30" />
+            <!--need validation - use 'pattern' attribute with a regexp?-->
+            <!--use 'select' input type? -->
+          Work:<input type="text" class="prompt workTime text-center" value="00:01:00" />
+          Break:<input type="text" class="prompt breakTime text-center" value="00:00:30" />
         </form>
       </div>
     </div>
+
     <div class="row">
       <div class="mx-auto clockContainer">
-        <input type="text" class="clock" value="00:00:00" readonly />
+        <input type="text" class="clock text-center" value="00:01:00" readonly />
       </div>
     </div>
+
     <div class="row">
       <div class="mx-auto userButtons">
         <button type="button" class="btn btn-info startClock">Start Clock</button>
         <button type="button" class="btn btn-info pauseClock">Pause Clock</button>
-        <button type="button" class="btn btn-info clearClock">Clear Clock</button>
+        <button type="button" class="btn btn-danger resetClock">Reset Clock</button>
       </div>
     </div>
+
   </div>
 
   <script src="src/index.js"></script>

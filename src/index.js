@@ -1,22 +1,29 @@
-// what happens when user alters work period or break period when clock is running?
+// what happens when user alters work period or break period when clock is running? - don't allow this,
+// user must use buttons?
 
 // use fade in/out and/or animation effects?
 
-// does user need the option to set periods of longer than an hour?or just use mm:ss?
+// does user need the option to set periods of longer than an hour? or just use mm:ss?
 
 const pomodoroClock = (function () {
   "use strict";
 
+  const clock = document.querySelector(".clock");
+  const workTime = document.querySelector(".workTime");
+  const breakTime = document.querySelector(".breakTime");
   let intervalID = 0;
   let isABreak = false;
-  const clock = document.querySelector(".clock");
+  let clockPaused = false;
+  let dt = new Date();
+
+  const setTime = (timeStr) => {
+    const startTimeArr = timeStr.split(":");
+    dt.setHours(...startTimeArr);
+    clock.value = timeStr;
+  };
 
   const startClock = () => {
     // start the pomodoro clock countdown
-    const workTime = document.querySelector(".workTime").value;
-    const breakTime = document.querySelector(".breakTime").value;
-    let dt = new Date();
-
     const countdown = () => {
       // decrement clock time by 1 second
       dt.setSeconds(dt.getSeconds() -1);
@@ -27,32 +34,39 @@ const pomodoroClock = (function () {
       if (clock.value === "00:00:00") {
         if (!isABreak) {
           isABreak = true;
-          setTime(breakTime);
+          setTime(breakTime.value);
         } else {
           isABreak = false;
-          setTime(workTime);
+          setTime(workTime.value);
         }
       }
     };
 
-    const setTime = (timeStr) => {
-      const startTimeArr = timeStr.split(":");
-      dt.setHours(...startTimeArr);
-      clock.value = timeStr;
-    };
-
-    // if (clock.value === "00:00:00") return;
-    setTime(workTime);
+    workTime.readOnly = true;
+    breakTime.readOnly = true;
+    if (!clockPaused) setTime(workTime.value);
+    clockPaused = false;
     intervalID = setInterval(countdown, 1000);
-  }
+  };
 
   const pauseClock = () => {
+    workTime.readOnly = false;
+    breakTime.readOnly = false;
     clearInterval(intervalID);
+    clockPaused = true;
+  };
+
+  const resetClock = () => {
+    workTime.readOnly = false;
+    breakTime.readOnly = false;   
+    clearInterval(intervalID);
+    setTime(workTime.value);
   };
 
   return {
     startClock: startClock,
-    pauseClock: pauseClock
+    pauseClock: pauseClock,
+    resetClock: resetClock
   }
 
 })();
@@ -62,3 +76,6 @@ document.querySelector(".startClock")
 
 document.querySelector(".pauseClock")
   .addEventListener("click", pomodoroClock.pauseClock);
+
+document.querySelector(".resetClock")
+  .addEventListener("click", pomodoroClock.resetClock);
