@@ -1,6 +1,7 @@
 input {
   margin: 10px;
-  width: 80px;
+  font-size: 20px;
+  width: 100px;
 }
 
 button {
@@ -15,7 +16,17 @@ button {
   margin-bottom: 20px;
 }
 
+.gap {
+  margin: 20px;
+}
+
 .clockContainer {
   margin-top: 50px;
   margin-bottom: 50px;
+}
+
+.clock {
+  border: transparent;
+  font-size: 70px;
+  width: 280px;
 }
