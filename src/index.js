@@ -1,6 +1,3 @@
-// what happens when user alters work period or break period when clock is running? - don't allow this,
-// user must use buttons?
-
 // use fade in/out and/or animation effects?
 
 // does user need the option to set periods of longer than an hour? or just use mm:ss?
@@ -15,6 +12,23 @@ const pomodoroClock = (function () {
   let isABreak = false;
   let clockPaused = false;
   let dt = new Date();
+
+  const validation = (inputEvent) => {
+    // const inputVal = inputEvent.data;
+    const timeStr = inputEvent.target.value;
+    const re = /\d/g;
+    let validated;
+
+    // check length & characters
+    if (timeStr.length === 8 && timeStr.match(re).length === 6 && timeStr[2] === ":" && timeStr[5] === ":") {
+      validated = true;
+      document.querySelector(".startClock").disabled = false
+    } else {
+      validated = false;
+      document.querySelector(".startClock").disabled = true;
+      // need some kind of visual indicator and/or message
+    }
+  };
 
   const setTime = (timeStr) => {
     const startTimeArr = timeStr.split(":");
@@ -42,34 +56,48 @@ const pomodoroClock = (function () {
       }
     };
 
-    workTime.readOnly = true;
-    breakTime.readOnly = true;
+    isReadOnly(true);
     if (!clockPaused) setTime(workTime.value);
     clockPaused = false;
     intervalID = setInterval(countdown, 1000);
   };
 
   const pauseClock = () => {
-    workTime.readOnly = false;
-    breakTime.readOnly = false;
+    isReadOnly(false);
     clearInterval(intervalID);
     clockPaused = true;
   };
 
   const resetClock = () => {
-    workTime.readOnly = false;
-    breakTime.readOnly = false;   
+    isReadOnly(false);
     clearInterval(intervalID);
     setTime(workTime.value);
+  };
+
+  const isReadOnly = (bln) => {
+    if (bln) {
+      workTime.readOnly = true;
+      breakTime.readOnly = true;
+    } else {
+      workTime.readOnly = false;
+      breakTime.readOnly = false;
+    }
   };
 
   return {
     startClock: startClock,
     pauseClock: pauseClock,
-    resetClock: resetClock
+    resetClock: resetClock,
+    validation: validation
   }
 
 })();
+
+document.querySelector(".workTime")
+  .addEventListener("input", pomodoroClock.validation);
+
+document.querySelector(".breakTime")
+  .addEventListener("input", pomodoroClock.validation);
 
 document.querySelector(".startClock")
   .addEventListener("click", pomodoroClock.startClock);
