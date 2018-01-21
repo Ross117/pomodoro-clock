@@ -1,3 +1,4 @@
+// need 'timer' to go off when work period ends
 // use fade in/out and/or animation effects?
 
 // does user need the option to set periods of longer than an hour? or just use mm:ss?
@@ -14,19 +15,22 @@ const pomodoroClock = (function () {
   let dt = new Date();
 
   const validation = (inputEvent) => {
-    // const inputVal = inputEvent.data;
     const timeStr = inputEvent.target.value;
     const re = /\d/g;
-    let validated;
+    let validated = false;
 
     // check length & characters
     if (timeStr.length === 8 && timeStr.match(re).length === 6 && timeStr[2] === ":" && timeStr[5] === ":") {
       validated = true;
       document.querySelector(".startClock").disabled = false
+      document.querySelector(".resetClock").disabled = false
+      inputEvent.target.style.background = "#FFFFFF";
     } else {
       validated = false;
       document.querySelector(".startClock").disabled = true;
-      // need some kind of visual indicator and/or message
+      document.querySelector(".resetClock").disabled = true;
+      // need an error message?
+      inputEvent.target.style.background = "#C02424";
     }
   };
 
@@ -36,16 +40,28 @@ const pomodoroClock = (function () {
     clock.value = timeStr;
   };
 
+  const readOnlyPrompts = (bln) => {
+    if (bln) {
+      workTime.readOnly = true;
+      breakTime.readOnly = true;
+    } else {
+      workTime.readOnly = false;
+      breakTime.readOnly = false;
+    }
+  };
+
   const startClock = () => {
     // start the pomodoro clock countdown
     const countdown = () => {
       // decrement clock time by 1 second
+      debugger;
       dt.setSeconds(dt.getSeconds() -1);
       // display on the web page
       clock.value = dt.toLocaleTimeString('en-GB');
 
       // handle transitions between work periods and break periods
       if (clock.value === "00:00:00") {
+        document.querySelector(".timer").play();
         if (!isABreak) {
           isABreak = true;
           setTime(breakTime.value);
@@ -56,32 +72,22 @@ const pomodoroClock = (function () {
       }
     };
 
-    isReadOnly(true);
+    if (workTime.value === "00:00:00") return;
+    readOnlyPrompts(true);
     if (!clockPaused) setTime(workTime.value);
     clockPaused = false;
     intervalID = setInterval(countdown, 1000);
   };
 
   const pauseClock = () => {
-    isReadOnly(false);
     clearInterval(intervalID);
     clockPaused = true;
   };
 
   const resetClock = () => {
-    isReadOnly(false);
+    readOnlyPrompts(false);
     clearInterval(intervalID);
     setTime(workTime.value);
-  };
-
-  const isReadOnly = (bln) => {
-    if (bln) {
-      workTime.readOnly = true;
-      breakTime.readOnly = true;
-    } else {
-      workTime.readOnly = false;
-      breakTime.readOnly = false;
-    }
   };
 
   return {
