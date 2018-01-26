@@ -30,3 +30,8 @@ button {
   font-size: 70px;
   width: 280px;
 }
+
+.indicator {
+  font-size: 45px;
+  font-style: italic;
+}
