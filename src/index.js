@@ -1,43 +1,34 @@
-// need 'timer' to go off when work period ends
 // use fade in/out and/or animation effects?
-
-// does user need the option to set periods of longer than an hour? or just use mm:ss?
 
 const pomodoroClock = (function () {
   "use strict";
 
-  const clock = document.querySelector(".clock");
-  const workTime = document.querySelector(".workTime");
-  const breakTime = document.querySelector(".breakTime");
+  const workTime = document.querySelector("#workTime");
+  const breakTime = document.querySelector("#breakTime");
+  const startBtn = document.querySelector(".startClock");
   let intervalID = 0;
-  let isABreak = false;
   let clockPaused = false;
-  let dt = new Date();
+  let isABreak = false;
+  let promptChange = {workTime: false, breakTime: false};
 
   const validation = (inputEvent) => {
     const timeStr = inputEvent.target.value;
     const re = /\d/g;
     let validated = false;
 
-    // check length & characters
-    if (timeStr.length === 8 && timeStr.match(re).length === 6 && timeStr[2] === ":" && timeStr[5] === ":") {
-      validated = true;
-      document.querySelector(".startClock").disabled = false
-      document.querySelector(".resetClock").disabled = false
-      inputEvent.target.style.background = "#FFFFFF";
+    // check length & characters - use pattern instead?
+    if (timeStr.length === 8 && timeStr.match(re).length === 6
+      && timeStr[2] === ":" && timeStr[5] === ":") {
+        validated = true;
+        promptChange[inputEvent.srcElement.id] = true;
+        startBtn.disabled = false
+        inputEvent.target.style.background = "#FFFFFF";
     } else {
       validated = false;
-      document.querySelector(".startClock").disabled = true;
-      document.querySelector(".resetClock").disabled = true;
+      startBtn.disabled = true;
       // need an error message?
       inputEvent.target.style.background = "#C02424";
     }
-  };
-
-  const setTime = (timeStr) => {
-    const startTimeArr = timeStr.split(":");
-    dt.setHours(...startTimeArr);
-    clock.value = timeStr;
   };
 
   const readOnlyPrompts = (bln) => {
@@ -51,58 +42,84 @@ const pomodoroClock = (function () {
   };
 
   const startClock = () => {
+
+    const clock = document.querySelector(".clock");
+    let tme;
+
+    const setTime = (timeStr) => {
+      let tme = new Date();
+      const startTimeArr = timeStr.split(":");
+
+      tme.setHours(...startTimeArr);
+      clock.value = timeStr;
+
+      return tme;
+    };
+
     // start the pomodoro clock countdown
     const countdown = () => {
-      // decrement clock time by 1 second
-      debugger;
-      dt.setSeconds(dt.getSeconds() -1);
-      // display on the web page
-      clock.value = dt.toLocaleTimeString('en-GB');
 
       // handle transitions between work periods and break periods
       if (clock.value === "00:00:00") {
+        clearInterval(intervalID);
         document.querySelector(".timer").play();
         if (!isABreak) {
           isABreak = true;
-          setTime(breakTime.value);
+          // break visualisation
+          tme = setTime(breakTime.value);
+          intervalID = setInterval(countdown, 1000);
         } else {
           isABreak = false;
-          setTime(workTime.value);
+          // work visualisation
+          tme = setTime(workTime.value);
+          intervalID = setInterval(countdown, 1000);
         }
       }
+
+      // decrement clock time by 1 second
+      tme.setSeconds(tme.getSeconds() -1);
+      // display on the web page
+      clock.value = tme.toLocaleTimeString('en-GB');
     };
 
     if (workTime.value === "00:00:00") return;
+    startBtn.disabled = true;
     readOnlyPrompts(true);
-    if (!clockPaused) setTime(workTime.value);
+    if (!clockPaused) {
+      tme = setTime(workTime.value);
+    } else if (promptChange.workTime && !isABreak) {
+      tme = setTime(workTime.value);
+    } else if (promptChange.breakTime && isABreak) {
+      tme = setTime(breakTime.value);
+    } else {
+      tme = setTime(clock.value);
+    }
+
     clockPaused = false;
+    promptChange.workTime = false;
+    promptChange.breakTime = false;
     intervalID = setInterval(countdown, 1000);
   };
 
   const pauseClock = () => {
     clearInterval(intervalID);
-    clockPaused = true;
-  };
-
-  const resetClock = () => {
+    startBtn.disabled = false
     readOnlyPrompts(false);
-    clearInterval(intervalID);
-    setTime(workTime.value);
+    clockPaused = true;
   };
 
   return {
     startClock: startClock,
     pauseClock: pauseClock,
-    resetClock: resetClock,
     validation: validation
   }
 
 })();
 
-document.querySelector(".workTime")
+document.querySelector("#workTime")
   .addEventListener("input", pomodoroClock.validation);
 
-document.querySelector(".breakTime")
+document.querySelector("#breakTime")
   .addEventListener("input", pomodoroClock.validation);
 
 document.querySelector(".startClock")
@@ -110,6 +127,3 @@ document.querySelector(".startClock")
 
 document.querySelector(".pauseClock")
   .addEventListener("click", pomodoroClock.pauseClock);
-
-document.querySelector(".resetClock")
-  .addEventListener("click", pomodoroClock.resetClock);
