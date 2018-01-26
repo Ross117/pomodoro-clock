@@ -12,13 +12,14 @@ const pomodoroClock = (function () {
   let promptChange = {workTime: false, breakTime: false};
 
   const validation = (inputEvent) => {
+
     const timeStr = inputEvent.target.value;
-    const re = /\d/g;
+    // specify time format as hh:mm:ss
+    const re = /^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$/;
     let validated = false;
 
-    // check length & characters - use pattern instead?
-    if (timeStr.length === 8 && timeStr.match(re).length === 6
-      && timeStr[2] === ":" && timeStr[5] === ":") {
+    // check length & characters
+    if (timeStr.match(re) !== null) {
         validated = true;
         promptChange[inputEvent.srcElement.id] = true;
         startBtn.disabled = false
@@ -32,6 +33,7 @@ const pomodoroClock = (function () {
   };
 
   const readOnlyPrompts = (bln) => {
+
     if (bln) {
       workTime.readOnly = true;
       breakTime.readOnly = true;
@@ -46,6 +48,7 @@ const pomodoroClock = (function () {
     const clock = document.querySelector(".clock");
     let tme;
 
+    // converts a time string to a date value, and sets the clock's initial value
     const setTime = (timeStr) => {
       let tme = new Date();
       const startTimeArr = timeStr.split(":");
@@ -65,12 +68,12 @@ const pomodoroClock = (function () {
         document.querySelector(".timer").play();
         if (!isABreak) {
           isABreak = true;
-          // break visualisation
+          document.querySelector(".indicator").innerText = "Break Time";
           tme = setTime(breakTime.value);
           intervalID = setInterval(countdown, 1000);
         } else {
           isABreak = false;
-          // work visualisation
+          document.querySelector(".indicator").innerText = "Work Time";
           tme = setTime(workTime.value);
           intervalID = setInterval(countdown, 1000);
         }
@@ -85,8 +88,10 @@ const pomodoroClock = (function () {
     if (workTime.value === "00:00:00") return;
     startBtn.disabled = true;
     readOnlyPrompts(true);
+    // ensure clock responds to user interaction
     if (!clockPaused) {
       tme = setTime(workTime.value);
+      document.querySelector(".indicator").innerText = "Work Time";
     } else if (promptChange.workTime && !isABreak) {
       tme = setTime(workTime.value);
     } else if (promptChange.breakTime && isABreak) {
