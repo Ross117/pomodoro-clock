@@ -17,29 +17,26 @@
   <div class="container-fluid">
 
     <div class="row">
-      <div class="mx-auto heading">
+      <div class="mx-auto">
         <h1>Pomodoro Clock</h1>
       </div>
     </div>
 
     <div class="row">
       <div class="mx-auto userPrompts">
-        <form>
-          Work:<input type="text" id="workTime" class="prompt text-center" value="00:25:00" />
-          <span class="gap"></span>
-          Break:<input type="text" id="breakTime" class="prompt text-center" value="00:05:00" />
+        <form class="form-inline">
+          <div class="form-group">
+            <label>Work:<input type="text" id="workTime" class="prompt text-center" value="00:25:00" /></label>
+            <label>Break:<input type="text" id="breakTime" class="prompt text-center" value="00:05:00" /></label>
+            <label class="errMsg"></label>
+          </div>
         </form>
       </div>
     </div>
 
     <div class="row">
-      <div class="mx-auto">
-        <p class="indicator">Work Time</p>
-      </div>
-    </div>
-
-    <div class="row">
       <div class="mx-auto clockContainer">
+        <p class="indicator text-center">Work Time</p>
         <input type="text" class="clock text-center" value="00:25:00" readonly />
       </div>
     </div>

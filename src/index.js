@@ -13,22 +13,22 @@ const pomodoroClock = (function () {
 
   const validation = (inputEvent) => {
 
+    const errMsg = document.querySelector(".errMsg");
     const timeStr = inputEvent.target.value;
     // specify time format as hh:mm:ss
     const re = /^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$/;
-    let validated = false;
 
     // check length & characters
     if (timeStr.match(re) !== null) {
-        validated = true;
         promptChange[inputEvent.srcElement.id] = true;
         startBtn.disabled = false
         inputEvent.target.style.background = "#FFFFFF";
+        errMsg.innerText = "";
     } else {
-      validated = false;
       startBtn.disabled = true;
       // need an error message?
       inputEvent.target.style.background = "#C02424";
+      errMsg.innerText = "hh:mm:ss";
     }
   };
 

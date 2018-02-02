@@ -1,3 +1,12 @@
+body {
+  font-family: Verdana, sans-serif;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 50px;
+}
+
 input {
   margin: 10px;
   font-size: 20px;
@@ -8,30 +17,28 @@ button {
   margin: 10px;
 }
 
-.heading {
-  margin-bottom: 20px;
-}
-
 .userPrompts {
   margin-bottom: 20px;
 }
 
-.gap {
-  margin: 20px;
-}
-
-.clockContainer {
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
-.clock {
-  border: transparent;
-  font-size: 70px;
-  width: 280px;
+.errMsg {
+  font-style: italic;
+  color: #F20C0C;
 }
 
 .indicator {
   font-size: 45px;
   font-style: italic;
+}
+
+.clockContainer {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.clock {
+  font-size: 70px;
+  width: 300px;
+  background-color: #D06B6B;
+  border: 8px solid black;
 }
