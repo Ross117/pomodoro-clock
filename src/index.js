@@ -1,32 +1,33 @@
-// use fade in/out and/or animation effects?
-
 const pomodoroClock = (function () {
   "use strict";
 
   const workTime = document.querySelector("#workTime");
   const breakTime = document.querySelector("#breakTime");
   const startBtn = document.querySelector(".startClock");
+  const errMsg = document.querySelector(".errMsg");
   let intervalID = 0;
   let clockPaused = false;
   let isABreak = false;
   let promptChange = {workTime: false, breakTime: false};
 
   const validation = (inputEvent) => {
-
-    const errMsg = document.querySelector(".errMsg");
     const timeStr = inputEvent.target.value;
     // specify time format as hh:mm:ss
     const re = /^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$/;
 
     // check length & characters
     if (timeStr.match(re) !== null) {
+        // handle cross browser differences in the input event object
+        if (inputEvent.srcElement !== undefined) {
         promptChange[inputEvent.srcElement.id] = true;
-        startBtn.disabled = false
+        } else if (inputEvent.target !== undefined) {
+        promptChange[inputEvent.target.id] = true;
+        }
+        startBtn.disabled = false;
         inputEvent.target.style.background = "#FFFFFF";
         errMsg.innerText = "";
     } else {
       startBtn.disabled = true;
-      // need an error message?
       inputEvent.target.style.background = "#C02424";
       errMsg.innerText = "hh:mm:ss";
     }
@@ -61,7 +62,6 @@ const pomodoroClock = (function () {
 
     // start the pomodoro clock countdown
     const countdown = () => {
-
       // handle transitions between work periods and break periods
       if (clock.value === "00:00:00") {
         clearInterval(intervalID);
@@ -81,13 +81,19 @@ const pomodoroClock = (function () {
 
       // decrement clock time by 1 second
       tme.setSeconds(tme.getSeconds() -1);
-      // display on the web page
+      // display on the web document
       clock.value = tme.toLocaleTimeString('en-GB');
     };
 
-    if (workTime.value === "00:00:00") return;
+    if (workTime.value === "00:00:00" || breakTime.value === "00:00:00") {
+      errMsg.innerText = "Be sure to enter a duration for each period!";
+      return;
+    }
+
+    errMsg.innerText = "";
     startBtn.disabled = true;
     readOnlyPrompts(true);
+
     // ensure clock responds to user interaction
     if (!clockPaused) {
       tme = setTime(workTime.value);
@@ -108,7 +114,7 @@ const pomodoroClock = (function () {
 
   const pauseClock = () => {
     clearInterval(intervalID);
-    startBtn.disabled = false
+    startBtn.disabled = false;
     readOnlyPrompts(false);
     clockPaused = true;
   };
@@ -117,7 +123,7 @@ const pomodoroClock = (function () {
     startClock: startClock,
     pauseClock: pauseClock,
     validation: validation
-  }
+  };
 
 })();
 
