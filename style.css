@@ -23,6 +23,7 @@ button {
 
 .errMsg {
   font-style: italic;
+  font-weight: 900;
   color: #F20C0C;
 }
 
