@@ -5,23 +5,29 @@ body {
 h1 {
   margin-bottom: 20px;
   font-size: 50px;
-}
-
-input {
-  margin: 10px;
-  font-size: 20px;
-  width: 100px;
+  text-align: center;
 }
 
 button {
   margin: 10px;
 }
 
-.userPrompts {
+.prompt {
+  margin: 10px;
+  font-size: 20px;
+  width: 100px;
+}
+
+.container {
+  margin: auto;
+  width: 382px;
+}
+
+.form-container{
   margin-bottom: 20px;
 }
 
-.errMsg {
+.err-msg {
   font-style: italic;
   font-weight: 900;
   color: #F20C0C;
@@ -32,14 +38,16 @@ button {
   font-style: italic;
 }
 
-.clockContainer {
-  margin-top: 30px;
-  margin-bottom: 30px;
+.clock-container {
+  margin: 30px auto;
+  width: 350px;
+  background-color: #D06B6B;
+  border: 8px solid black;
 }
 
 .clock {
+  /* width: 300px; */
+  background-color: inherit;
   font-size: 70px;
-  width: 300px;
-  background-color: #D06B6B;
-  border: 8px solid black;
+  text-align: center;
 }
