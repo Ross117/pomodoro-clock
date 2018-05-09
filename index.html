@@ -12,17 +12,22 @@
 
   <audio class="js-timer" src="https://www.soundjay.com/clock/sounds/alarm-clock-01.mp3" autostart="false"></audio>
 
-  <h1>Pomodoro Clock</h1>
-
   <div class="container">
 
-    <form>
-      <div class="form-container">
-        <label>Work:<input type="text" id="js-work-time" class="prompt" value="00:25:00" /></label>
-        <label>Break:<input type="text" id="js-break-time" class="prompt" value="00:05:00" /></label>
-        <label class="err-msg js-err-msg"></label>
-      </div>
-    </form>
+    <h1>Pomodoro Clock</h1>
+
+    <div class="form-container">
+      <form>
+        <div class="prompt">
+          <label>Work:<input type="text" id="workTime" value="00:25:00" /></label>
+        </div>
+        <div class="prompt">
+          <label>Break:<input type="text" id="breakTime" value="00:05:00" /></label>
+        </div>
+      </form>
+    </div>
+
+    <p class="err-msg js-err-msg"></p>
 
     <p class="indicator js-indicator">Work Time</p>
 
