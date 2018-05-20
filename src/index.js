@@ -60,7 +60,10 @@ const pomodoroClock = (function () {
     // start the pomodoro clock countdown
     const countdown = () => {
       // handle transitions between work periods and break periods
-      if (clock.value === '00:00:00') {
+      // mutiple date object functions in if statement used as a workaround
+      // to handle Edge/IE bug when checking value of the clock input element.
+      // (clock.value === '00:00:00' never returns 'true' in MS browsers)
+      if (tme.getHours() === 0 && tme.getMinutes() === 0 && tme.getSeconds() === 0) {
         clearInterval(intervalID);
         document.querySelector(".js-timer").play();
         if (!isABreak) {
