@@ -10,6 +10,7 @@ const pomodoroClock = (function () {
   let clockPaused = false;
   let isABreak = false;
   let promptChange = {'workTime': false, 'breakTime': false};
+  let tme;
 
   const validation = (inputEvent) => {
     const inputEle = inputEvent.target;
@@ -44,7 +45,6 @@ const pomodoroClock = (function () {
 
   const startClock = () => {
     const clock = document.querySelector(".js-clock");
-    let tme;
 
     // converts a time string to a date value, and sets the clock's initial value
     const setTime = (timeStr) => {
@@ -98,8 +98,6 @@ const pomodoroClock = (function () {
       tme = setTime(workTime.value);
     } else if (promptChange.breakTime && isABreak) {
       tme = setTime(breakTime.value);
-    } else {
-      tme = setTime(clock.value);
     }
 
     clockPaused = false;
