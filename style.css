@@ -25,18 +25,21 @@ button {
   font-size: 120%
 }
 
-/*use media query to only centre container if viewport height is above
-a defined value  */
 .container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 100%;
   max-width: 400px;
   margin: auto;
   border: 5px solid black;
   box-shadow: 0px 0px 5px 5px #6B6360;
+}
+
+@media (min-height: 460px) {
+  .container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .prompt {
