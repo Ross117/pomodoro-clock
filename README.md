@@ -5,5 +5,3 @@ Built using JavaScript, HTML and CSS, along with the Bootstrap framework.
 A Free Code Camp project.
 
 Alarm audio courtesy of www.soundjay.com.
-
-PLEASE NOTE: not currently compatible with the Microsoft Internet Explorer or Microsoft Edge browsers.
