@@ -1,9 +1,10 @@
 const pomodoroClock = (function () {
   "use strict";
 
-  const workTime = document.querySelector("#workTime");
-  const breakTime = document.querySelector("#breakTime");
+  const workTime = document.querySelector(".workTime");
+  const breakTime = document.querySelector(".breakTime");
   const startBtn = document.querySelector(".js-start-clock");
+  const pauseBtn = document.querySelector(".js-pause-clock");
   const errMsg = document.querySelector(".js-err-msg");
   let intervalID = 0;
   let clockPaused = false;
@@ -18,17 +19,14 @@ const pomodoroClock = (function () {
 
     // check length & characters
     if (timeStr.match(re) !== null) {
-      // handle cross browser differences in the input event object
-      if (inputEvent.srcElement !== undefined) {
-        promptChange[inputEvent.srcElement.id] = true;
-      } else if (inputEvent.target !== undefined) {
-        promptChange[inputEvent.target.id] = true;
-      }
+      promptChange[inputEle.className] = true;
       startBtn.disabled = false;
+      pauseBtn.disabled = false;
       inputEle.style.background = '#FFFFFF';
       errMsg.innerText = '';
     } else {
       startBtn.disabled = true;
+      pauseBtn.disabled = true;
       inputEle.style.background = '#C02424';
       errMsg.innerText = 'hh:mm:ss';
     }
@@ -69,13 +67,12 @@ const pomodoroClock = (function () {
           isABreak = true;
           document.querySelector(".js-indicator").innerText = "Break Time";
           tme = setTime(breakTime.value);
-          intervalID = setInterval(countdown, 1000);
         } else {
           isABreak = false;
           document.querySelector(".js-indicator").innerText = "Work Time";
           tme = setTime(workTime.value);
-          intervalID = setInterval(countdown, 1000);
         }
+        intervalID = setInterval(countdown, 1000);
       }
 
       // decrement clock time by 1 second
@@ -83,6 +80,7 @@ const pomodoroClock = (function () {
       // display on the web document
       clock.value = tme.toLocaleTimeString('en-GB');
     };
+
     if (workTime.value === '00:00:00' || breakTime.value === '00:00:00') {
       errMsg.innerText = 'Be sure to enter a duration for each period!';
       return;
@@ -124,10 +122,10 @@ const pomodoroClock = (function () {
   };
 }());
 
-document.querySelector('#workTime')
+document.querySelector('.workTime')
   .addEventListener('input', pomodoroClock.validation);
 
-document.querySelector('#breakTime')
+document.querySelector('.breakTime')
   .addEventListener('input', pomodoroClock.validation);
 
 document.querySelector(".js-start-clock")
