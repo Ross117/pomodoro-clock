@@ -10,6 +10,7 @@ const pomodoroClock = (function () {
   let clockPaused = false;
   let isABreak = false;
   let promptChange = {'workTime': false, 'breakTime': false};
+  let tme;
 
   const validation = (inputEvent) => {
     const inputEle = inputEvent.target;
@@ -44,7 +45,6 @@ const pomodoroClock = (function () {
 
   const startClock = () => {
     const clock = document.querySelector(".js-clock");
-    let tme;
 
     // converts a time string to a date value, and sets the clock's initial value
     const setTime = (timeStr) => {
@@ -60,7 +60,10 @@ const pomodoroClock = (function () {
     // start the pomodoro clock countdown
     const countdown = () => {
       // handle transitions between work periods and break periods
-      if (clock.value === '00:00:00') {
+      // mutiple date object functions in if statement used as a workaround
+      // to handle Edge/IE bug when checking value of the clock input element.
+      // (clock.value === '00:00:00' never returns 'true' in MS browsers)
+      if (tme.getHours() === 0 && tme.getMinutes() === 0 && tme.getSeconds() === 0) {
         clearInterval(intervalID);
         document.querySelector(".js-timer").play();
         if (!isABreak) {
@@ -98,8 +101,6 @@ const pomodoroClock = (function () {
       tme = setTime(workTime.value);
     } else if (promptChange.breakTime && isABreak) {
       tme = setTime(breakTime.value);
-    } else {
-      tme = setTime(clock.value);
     }
 
     clockPaused = false;

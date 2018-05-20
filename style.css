@@ -25,6 +25,8 @@ button {
   font-size: 120%
 }
 
+/*use media query to only centre container if viewport height is above
+a defined value  */
 .container {
   position: absolute;
   top: 50%;
