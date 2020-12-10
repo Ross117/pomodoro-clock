@@ -5,11 +5,15 @@ var pomodoroClock = (function () {
     var startBtn = document.querySelector(".js-start-clock");
     var pauseBtn = document.querySelector(".js-pause-clock");
     var errMsg = document.querySelector(".js-err-msg");
+    var sessionType = document.querySelector(".js-indicator");
     var intervalID = 0;
     var clockPaused = false;
     var isABreak = false;
-    var promptChange = { 'workTime': false, 'breakTime': false };
     var tme;
+    var promptChange = {
+        workTime: false,
+        breakTime: false
+    };
     var validation = function (inputEvent) {
         var inputEle = inputEvent.target;
         var timeStr = inputEle.value;
@@ -45,7 +49,11 @@ var pomodoroClock = (function () {
         // converts a time string to a date value, and sets the clock's initial value
         var setTime = function (timeStr) {
             var newTme = new Date();
+            // make compose a type (union or generic) to indicate what the array contains
+            // const startTimeArr: Array<string> = timeStr.split(':');
+            // const startTimeArr: Array<string> = timeStr.split(':');
             var startTimeArr = timeStr.split(':');
+            console.log(startTimeArr);
             newTme.setHours.apply(newTme, startTimeArr);
             clock.value = timeStr;
             return newTme;
@@ -56,17 +64,18 @@ var pomodoroClock = (function () {
             // mutiple date object functions in if statement used as a workaround
             // to handle Edge/IE bug when checking value of the clock input element.
             // (clock.value === '00:00:00' never returns 'true' in MS browsers)
+            var alarmAudio = document.querySelector(".js-timer");
             if (tme.getHours() === 0 && tme.getMinutes() === 0 && tme.getSeconds() === 0) {
                 clearInterval(intervalID);
-                document.querySelector(".js-timer").play();
+                alarmAudio.play();
                 if (!isABreak) {
                     isABreak = true;
-                    document.querySelector(".js-indicator").innerText = "Break Time";
+                    sessionType.innerText = "Break Time";
                     tme = setTime(breakTime.value);
                 }
                 else {
                     isABreak = false;
-                    document.querySelector(".js-indicator").innerText = "Work Time";
+                    sessionType.innerText = "Work Time";
                     tme = setTime(workTime.value);
                 }
                 intervalID = setInterval(countdown, 1000);
@@ -86,7 +95,7 @@ var pomodoroClock = (function () {
         // ensure clock responds to user interaction
         if (!clockPaused) {
             tme = setTime(workTime.value);
-            document.querySelector(".js-indicator").innerText = "Work Time";
+            sessionType.innerText = "Work Time";
         }
         else if (promptChange.workTime && !isABreak) {
             tme = setTime(workTime.value);

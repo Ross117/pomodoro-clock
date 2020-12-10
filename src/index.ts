@@ -1,22 +1,33 @@
 const pomodoroClock = (function () {
   "use strict";
 
-  const workTime = document.querySelector(".workTime");
-  const breakTime = document.querySelector(".breakTime");
-  const startBtn = document.querySelector(".js-start-clock");
-  const pauseBtn = document.querySelector(".js-pause-clock");
-  const errMsg = document.querySelector(".js-err-msg");
-  let intervalID = 0;
-  let clockPaused = false;
-  let isABreak = false;
-  let promptChange = {'workTime': false, 'breakTime': false};
-  let tme;
+  const workTime: HTMLInputElement = document.querySelector(".workTime");
+  const breakTime: HTMLInputElement = document.querySelector(".breakTime");
+  const startBtn: HTMLButtonElement = document.querySelector(".js-start-clock");
+  const pauseBtn: HTMLButtonElement = document.querySelector(".js-pause-clock");
+  const errMsg: HTMLParagraphElement = document.querySelector(".js-err-msg");
+  const sessionType: HTMLParagraphElement = document.querySelector(".js-indicator");
+  
+  let intervalID: number = 0;
+  let clockPaused: boolean = false;
+  let isABreak: boolean = false;
+  let tme: Date;
 
-  const validation = (inputEvent) => {
-    const inputEle = inputEvent.target;
-    const timeStr = inputEle.value;
+  interface PromptChange { 
+    workTime: boolean, 
+    breakTime: boolean 
+  }
+  
+  let promptChange: PromptChange = { 
+    workTime: false, 
+    breakTime: false 
+  };
+
+  const validation = (inputEvent: InputEvent): void => {
+    const inputEle: HTMLInputElement = inputEvent.target;
+    const timeStr: string = inputEle.value;
     // specify time format as hh:mm:ss
-    const re = /^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$/;
+    const re: RegExp = /^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$/;
 
     // check length & characters
     if (timeStr.match(re) !== null) {
@@ -33,7 +44,7 @@ const pomodoroClock = (function () {
     }
   };
 
-  const readOnlyPrompts = (bln) => {
+  const readOnlyPrompts = (bln: boolean): void => {
     if (bln) {
       workTime.readOnly = true;
       breakTime.readOnly = true;
@@ -43,14 +54,17 @@ const pomodoroClock = (function () {
     }
   };
 
-  const startClock = () => {
-    const clock = document.querySelector(".js-clock");
+  const startClock = (): void => {
+    const clock: HTMLInputElement = document.querySelector(".js-clock");
 
     // converts a time string to a date value, and sets the clock's initial value
-    const setTime = (timeStr) => {
-      const newTme = new Date();
-      const startTimeArr = timeStr.split(':');
-
+    const setTime = (timeStr: string) => {
+      const newTme: Date = new Date();
+      // make compose a type (union or generic) to indicate what the array contains
+      // const startTimeArr: Array<string> = timeStr.split(':');
+      // const startTimeArr: Array<string> = timeStr.split(':');
+      const startTimeArr: [string, string, string] = timeStr.split(':');
+      console.log(startTimeArr)
       newTme.setHours(...startTimeArr);
       clock.value = timeStr;
 
@@ -58,21 +72,23 @@ const pomodoroClock = (function () {
     };
 
     // start the pomodoro clock countdown
-    const countdown = () => {
+    const countdown = (): void => {
       // handle transitions between work periods and break periods
       // mutiple date object functions in if statement used as a workaround
       // to handle Edge/IE bug when checking value of the clock input element.
       // (clock.value === '00:00:00' never returns 'true' in MS browsers)
+      const alarmAudio: HTMLAudioElement = document.querySelector(".js-timer");
+
       if (tme.getHours() === 0 && tme.getMinutes() === 0 && tme.getSeconds() === 0) {
         clearInterval(intervalID);
-        document.querySelector(".js-timer").play();
+        alarmAudio.play();
         if (!isABreak) {
           isABreak = true;
-          document.querySelector(".js-indicator").innerText = "Break Time";
+          sessionType.innerText = "Break Time";
           tme = setTime(breakTime.value);
         } else {
           isABreak = false;
-          document.querySelector(".js-indicator").innerText = "Work Time";
+          sessionType.innerText = "Work Time";
           tme = setTime(workTime.value);
         }
         intervalID = setInterval(countdown, 1000);
@@ -96,7 +112,7 @@ const pomodoroClock = (function () {
     // ensure clock responds to user interaction
     if (!clockPaused) {
       tme = setTime(workTime.value);
-      document.querySelector(".js-indicator").innerText = "Work Time";
+      sessionType.innerText = "Work Time";
     } else if (promptChange.workTime && !isABreak) {
       tme = setTime(workTime.value);
     } else if (promptChange.breakTime && isABreak) {
@@ -109,7 +125,7 @@ const pomodoroClock = (function () {
     intervalID = setInterval(countdown, 1000);
   };
 
-  const pauseClock = () => {
+  const pauseClock = (): void => {
     clearInterval(intervalID);
     startBtn.disabled = false;
     readOnlyPrompts(false);
