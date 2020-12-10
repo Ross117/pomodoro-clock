@@ -1,0 +1,23 @@
+{
+  "name": "pomodoro-clock",
+  "version": "1.0.0",
+  "description": "A productivity tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typescript": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ross117/pomodoro-clock.git"
+  },
+  "author": "Ross Morran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ross117/pomodoro-clock/issues"
+  },
+  "homepage": "https://github.com/Ross117/pomodoro-clock#readme",
+  "dependencies": {
+    "typescript": "^4.1.2"
+  }
+}
