@@ -1,30 +1,37 @@
-const pomodoroClock = (function () {
-  "use strict";
+"use strict";
 
+interface PomodoroClock {
+  startClock: EventListener,
+  pauseClock: EventListener,
+  validation: EventListener
+}
+
+const pomodoroClock: PomodoroClock = (function (): PomodoroClock {
   const workTime: HTMLInputElement = document.querySelector(".workTime");
   const breakTime: HTMLInputElement = document.querySelector(".breakTime");
   const startBtn: HTMLButtonElement = document.querySelector(".js-start-clock");
   const pauseBtn: HTMLButtonElement = document.querySelector(".js-pause-clock");
   const errMsg: HTMLParagraphElement = document.querySelector(".js-err-msg");
   const sessionType: HTMLParagraphElement = document.querySelector(".js-indicator");
-  
+
   let intervalID: number = 0;
   let clockPaused: boolean = false;
   let isABreak: boolean = false;
   let tme: Date;
 
-  interface PromptChange { 
-    workTime: boolean, 
-    breakTime: boolean 
+  interface PromptChange {
+    [index: string]: boolean,
+    workTime: boolean,
+    breakTime: boolean
   }
-  
-  let promptChange: PromptChange = { 
-    workTime: false, 
-    breakTime: false 
+
+  let promptChange: PromptChange = {
+    workTime: false,
+    breakTime: false
   };
 
   const validation = (inputEvent: InputEvent): void => {
-    const inputEle: HTMLInputElement = inputEvent.target;
+    const inputEle: HTMLInputElement = inputEvent.target as HTMLInputElement;
     const timeStr: string = inputEle.value;
     // specify time format as hh:mm:ss
     const re: RegExp = /^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$/;
@@ -57,15 +64,13 @@ const pomodoroClock = (function () {
   const startClock = (): void => {
     const clock: HTMLInputElement = document.querySelector(".js-clock");
 
-    // converts a time string to a date value, and sets the clock's initial value
-    const setTime = (timeStr: string) => {
+    // sets the clock's initial value
+    const setTime = (timeStr: string): Date => {
       const newTme: Date = new Date();
-      // make compose a type (union or generic) to indicate what the array contains
-      // const startTimeArr: Array<string> = timeStr.split(':');
-      // const startTimeArr: Array<string> = timeStr.split(':');
-      const startTimeArr: [string, string, string] = timeStr.split(':');
-      console.log(startTimeArr)
-      newTme.setHours(...startTimeArr);
+      const startTime: Array<string> = timeStr.split(':');
+      const startTimeToNumbers: Array<number> = startTime.map(val => Number(val))
+
+      newTme.setHours(...startTimeToNumbers as [number, number, number]);
       clock.value = timeStr;
 
       return newTme;
