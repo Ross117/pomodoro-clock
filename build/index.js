@@ -1,5 +1,5 @@
+"use strict";
 var pomodoroClock = (function () {
-    "use strict";
     var workTime = document.querySelector(".workTime");
     var breakTime = document.querySelector(".breakTime");
     var startBtn = document.querySelector(".js-start-clock");
@@ -46,15 +46,12 @@ var pomodoroClock = (function () {
     };
     var startClock = function () {
         var clock = document.querySelector(".js-clock");
-        // converts a time string to a date value, and sets the clock's initial value
+        // sets the clock's initial value
         var setTime = function (timeStr) {
             var newTme = new Date();
-            // make compose a type (union or generic) to indicate what the array contains
-            // const startTimeArr: Array<string> = timeStr.split(':');
-            // const startTimeArr: Array<string> = timeStr.split(':');
-            var startTimeArr = timeStr.split(':');
-            console.log(startTimeArr);
-            newTme.setHours.apply(newTme, startTimeArr);
+            var startTime = timeStr.split(':');
+            var startTimeToNumbers = startTime.map(function (val) { return Number(val); });
+            newTme.setHours.apply(newTme, startTimeToNumbers);
             clock.value = timeStr;
             return newTme;
         };
