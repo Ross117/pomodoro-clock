@@ -7,8 +7,8 @@ interface PomodoroClock {
 }
 
 const pomodoroClock: PomodoroClock = (function (): PomodoroClock {
-  const workTime: HTMLInputElement = document.querySelector(".workTime");
-  const breakTime: HTMLInputElement = document.querySelector(".breakTime");
+  const workTime: HTMLInputElement = document.querySelector("#workTime");
+  const breakTime: HTMLInputElement = document.querySelector("#breakTime");
   const startBtn: HTMLButtonElement = document.querySelector(".js-start-clock");
   const pauseBtn: HTMLButtonElement = document.querySelector(".js-pause-clock");
   const errMsg: HTMLParagraphElement = document.querySelector(".js-err-msg");
@@ -38,16 +38,14 @@ const pomodoroClock: PomodoroClock = (function (): PomodoroClock {
 
     // check length & characters
     if (timeStr.match(re) !== null) {
-      promptChange[inputEle.className] = true;
+      promptChange[inputEle.id] = true;
       startBtn.disabled = false;
       pauseBtn.disabled = false;
-      inputEle.style.background = '#FFFFFF';
       errMsg.innerText = '';
     } else {
       startBtn.disabled = true;
       pauseBtn.disabled = true;
-      inputEle.style.background = '#C02424';
-      errMsg.innerText = 'hh:mm:ss';
+      errMsg.innerText = `The format should be 'hh:mm:ss'`;
     }
   };
 
@@ -144,10 +142,10 @@ const pomodoroClock: PomodoroClock = (function (): PomodoroClock {
   };
 }());
 
-document.querySelector('.workTime')
+document.querySelector('#workTime')
   .addEventListener('input', pomodoroClock.validation);
 
-document.querySelector('.breakTime')
+document.querySelector('#breakTime')
   .addEventListener('input', pomodoroClock.validation);
 
 document.querySelector(".js-start-clock")

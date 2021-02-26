@@ -1,7 +1,7 @@
 "use strict";
 var pomodoroClock = (function () {
-    var workTime = document.querySelector(".workTime");
-    var breakTime = document.querySelector(".breakTime");
+    var workTime = document.querySelector("#workTime");
+    var breakTime = document.querySelector("#breakTime");
     var startBtn = document.querySelector(".js-start-clock");
     var pauseBtn = document.querySelector(".js-pause-clock");
     var errMsg = document.querySelector(".js-err-msg");
@@ -21,17 +21,15 @@ var pomodoroClock = (function () {
         var re = /^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$/;
         // check length & characters
         if (timeStr.match(re) !== null) {
-            promptChange[inputEle.className] = true;
+            promptChange[inputEle.id] = true;
             startBtn.disabled = false;
             pauseBtn.disabled = false;
-            inputEle.style.background = '#FFFFFF';
             errMsg.innerText = '';
         }
         else {
             startBtn.disabled = true;
             pauseBtn.disabled = true;
-            inputEle.style.background = '#C02424';
-            errMsg.innerText = 'hh:mm:ss';
+            errMsg.innerText = "The format should be 'hh:mm:ss'";
         }
     };
     var readOnlyPrompts = function (bln) {
@@ -117,9 +115,9 @@ var pomodoroClock = (function () {
         validation: validation,
     };
 }());
-document.querySelector('.workTime')
+document.querySelector('#workTime')
     .addEventListener('input', pomodoroClock.validation);
-document.querySelector('.breakTime')
+document.querySelector('#breakTime')
     .addEventListener('input', pomodoroClock.validation);
 document.querySelector(".js-start-clock")
     .addEventListener("click", pomodoroClock.startClock);
